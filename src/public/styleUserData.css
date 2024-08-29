@@ -1,0 +1,242 @@
+/*All ---------------------------------------------------------*/
+
+* {
+    font-family: "Century Gothic", sans-serif !important;
+}
+
+.btn-outline-danger:hover {
+    color: white !important;
+}
+
+input[readonly] {
+    background-color: white !important;
+    color: black;
+    cursor: default;
+}
+
+input[readonly]::selection {
+    background: transparent;
+}
+
+input:disabled {
+    background-color: #e9ecef !important;
+}
+
+h1, h2, h3, h4, h5 {
+    margin-bottom: 0;
+}
+
+.sidebar input:focus {
+    box-shadow: 0px 0px 0px 0.25rem rgb(220, 53, 69, 0.25) !important;
+    border-color: rgba(220, 53, 69, 0.5) !important;
+}
+
+body {
+    background-color: rgb(255, 227, 227);
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: #ff000d !important;
+}
+
+/*Header ---------------------------------------------------------*/
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+header > ul {
+    border-bottom: 1px solid red;
+}
+
+#logo {
+    width: 180px;
+    height: auto;
+}
+
+header nav[role="navigation"]{
+    display: flex;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    border-bottom: 1px solid red;
+}
+
+.nav-link {
+    transition: all 0s;
+}
+
+.nav-link:hover {
+    color: #ff000d;
+    /*font-size: 17px;*/
+    font-weight: 600;
+}
+
+.nav-link:focus {
+    color: #ff2222;
+}
+
+.navbar-nav * {
+    color: #9b0109;
+}
+
+.nav-link.active {
+    font-weight: 600;
+    color: #7a0208 !important;
+}
+
+/* Body ---------------------------------------------------------*/
+
+.cont {
+    display: flex;
+}
+
+/*Body Left ---------------------------------------------------------*/
+
+.sidebar {
+    display: block;
+    width: 30%;
+    flex-shrink: 0;
+}
+
+.form-check-label:hover {
+    cursor: pointer;
+}
+
+.form-check-input:hover {
+    cursor: pointer;
+}
+
+.formside {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.30);
+    margin-left: 1rem;
+    border-radius: 5px;
+}
+
+.formside:hover {
+    box-shadow: 0px 0px 10px rgba(140, 0, 0, 0.70);
+}
+
+.btn-form {
+    flex-grow: 1;
+}
+
+input[type="date"] {
+    min-width: 194px;
+}
+
+/* Body Right ---------------------------------------------------------*/
+/*
+.row > div {
+    background-color: rgba(0, 0, 0, 0.125);
+    border: 1px solid rgba(0, 0, 0, 0.30);
+}*/
+
+.logo {
+    height: calc(79px * 0.4);
+    width: auto;
+    top: -10px;
+    right: 15px;
+}
+
+.imgAuto {
+    object-fit: scale-down;
+}
+
+.reservaInfo {
+    background-color: white;
+    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.30);
+    width: 100%;
+    border-radius: 5px;
+}
+
+.reservaInfo:hover {
+    box-shadow: 0px 0px 10px 1px rgba(140, 0, 0, 0.70);
+}
+
+.toastLive {
+    left: 71%;
+}
+
+.toast {
+    color: white;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Footer ---------------------------------------------------------*/
+
+footer {
+    border-top: 1px solid red;
+    background-color: white;
+}
+
+/* Footer Start ---------------------------------------------------------*/
+
+.logos {
+    justify-content: space-evenly;
+    padding-bottom: 1%;
+    padding-top: 1%;
+}
+
+.logos img {
+    object-fit: scale-down;
+}
+
+/* Footer End ---------------------------------------------------------*/
+
+.fend {
+    justify-content: space-evenly;
+    padding: 1.5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    border-top: 1px solid red;
+}
+
+.fend * {
+    color: #9b0109;
+}
+
+.info {
+    padding: 10px;
+}
+
+#ph1 {
+    padding-right: 4px;
+    padding-left: 2px;
+}
+
+#ph2 {
+    padding-left: 2px;
+}
+
+/* End ---------------------------------------------------------*/
+
+@media screen and (max-width: 867px) {
+    .cont {
+        flex-direction: column;
+    }
+
+    .formside {
+        width: 60vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .logos {
+        flex-direction: column !important;
+    }
+
+    .logos img {
+        display: block;
+    }
+}

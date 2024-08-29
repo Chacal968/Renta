@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html id="html" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Renta de Carros</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="icos/all.css">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="temp" role="status" style="background-color: white; height: 100vh; width: 100vw; position: absolute; z-index: 9999;">
+    <span>Loading...</span>
+    <script>
+      var t = 1;
+      function update (a) {
+        t = a;
+        var bar = document.getElementById('bar');
+        if (bar) bar.style = `width: ${t}%`;
+      }
+      setTimeout(function () {
+        document.getElementsByClassName('temp')[0].innerHTML = `<span class="visually-hidden">Loading...</span><div class="spinner-border" style="width: 5rem; height: 5rem; position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;"></div><style>#bar {transition: width 3s;}</style><div class="progress" style="margin-top: 70vh; margin-left: auto; margin-right: auto; width: 50vw;"><div class="progress-bar" id="bar" role="progressbar" style="width: ${t}%"></div></div>`;
+      }, 1000);
+    </script>
+  </div>
+    <header class="page-header" hidden>
+        <!--<nav role="navigation">
+        
+        </nav>-->
+        <nav role="navigation" class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              
+              <a class="navbar-brand" href="#"> <img src="logos/6.png"  alt="Cuaba-Group" id="logo"> </a>
+              
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li>
+                    <a class="nav-link" href="#">Inicio</a>
+                  </li>
+                  <li>
+                    <a class="nav-link active" href="#">Renta de Autos</a>
+                  </li>
+                  <li>
+                    <a class="nav-link" href="#">Hoteles</a>
+                  </li>
+                  <li>
+                    <a class="nav-link" href="#">Viajes</a>
+                  </li>
+                  <li>
+                    <a class="nav-link" href="#">Casas particulares</a>
+                  </li>
+                </ul>
+              
+              </div>
+            </div>
+          </nav>
+        
+    </header>
+
+    <script class="temp">
+      update(10);
+    </script>
+
+    <div class="cont" hidden>
+      
+      <div class="sidebar">
+        <form method="get" action="/" class="formside mt-3" id="formside">
+
+          <label class="form-label mx-2 mt-3">Buscar por</label>
+
+          <div class="form-floating mx-2 mt-2">
+            <select class="form-select px-3" id="Categ" name="Categ" value="<%= inicialData.Categ %>" required>
+              <option value="0">Todas</option>
+              <% if (queryResultCateg) { %>                            
+                <% for (var i=0; i < queryResultCateg.length;  i++) { %>
+                    <option value=<%=queryResultCateg[i].id%>> <%=queryResultCateg[i].categoria%> </option> 
+                    <% } %>
+            <% } %>  
+            </select>
+            <label>Categoría</label>
+          </div>
+          <div class="mx-2 mt-2 date">
+            
+            <div class="form-floating datepicker left">
+              <input type="date" id="pickup" name="pick" value="<%= inicialData.pick %>" class="form-control picker" placeholder="" required>
+              <label>Fecha de recogida</label>
+            </div>
+
+            <div class="form-floating datepicker right mt-2">
+              <input type="date" id="dropoff" name="drop" value="<%= inicialData.drop %>" class="form-control picker" placeholder="" required>
+              <label>Fecha de devolución</label>
+            </div>
+
+          </div>
+          
+          <button type="button" id="btnBuscar" class="btn btn-outline-danger btn-find mx-2 mt-2 mb-3">Buscar</button>
+
+        </form>
+      </div>
+
+      <script class="temp">
+        update(20);
+      </script>
+  
+      <div class="layout card-group">
+        <% queryResultAutos.forEach(vRow => { %>
+          <div class="card text-center mt-3">
+            <img src="logos/<%= vRow.idProveedor %>.png" class="logo">
+            <img src="Carros/<%= vRow.idAuto %>.jpg" class="card-img-top" alt="Auto">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><%= vRow.marca %> <%= vRow.modelo %></li>
+              <li class="list-group-item"><%= vRow.categoria %></li>
+              <li class="list-group-item"><%= vRow.transmision %></li>
+              <li class="list-group-item d-flex justify-content-evenly fs-4">
+                <div class="row">
+                  <span id="costPerDay" class="col"><b>$<%= vRow.costo %> </b>/ día</span>
+                  <!-- Falta por registrar en la BD el valor del combustible: 40 + 2 -->
+                  <span id="totalCost" class="col"><b>$<%= diasReservados*vRow.costo + 42 %></b></span>
+                </div>
+              </li>
+            </ul>
+            <div class="card-body">
+              <button type="submit" formaction="/form/<%= vRow.idAuto %>/" form="formside" class="btn btn-outline-danger">Seleccionar</button>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+      <script class="temp">
+        update(30);
+      </script>
+
+    </div>
+    
+    <footer class="mt-4" hidden>
+
+      <div class="d-flex flex-row mt-2 logos">
+        <img src="logos/1.png" alt="cubacar">
+        <img src="logos/2.png" alt="havanautos">
+        <img src="logos/3.png" alt="rex">
+        <img src="logos/4.png" alt="via">
+        <img src="logos/5.png" alt="cuba on the road">
+      </div>
+
+      <div class="d-flex flex-row fend">
+        <div class="text-center info">
+          <i class="fas fa-copyright"></i> 2024 Cuabagroup, todos los derechos reservados.
+        </div>
+
+        <div class="text-center info">
+          <i class="fas fa-map-marker-alt"></i> Plaza San Miguel, No.8, 2do Exterior Derecha, 28005, Madrid, España.
+        </div>
+
+        <div class="text-center info">
+          <i class="fas fa-mobile"></i> <i class="fas fa-comment-alt"></i> <a href="tel:+53 5 388 9896" class="d-inline-block" id="ph1">+53 5 388 9896</a> <a href="tel:+34 622 590 002" class="d-inline-block" id="ph2">+34 622 590 002</a>
+          <a class="d-inline-block" href="mailto:consulting@cuabagroup.com"><i class="fas fa-mail-bulk"></i> consulting@cuabagroup.com</a>
+        </div>
+      </div>
+
+    </footer>
+
+    <script class="temp">
+      update(40);
+    </script>
+    
+    <script src="jquery.slim.min.js"></script>
+    <script class="temp">
+      update(50);
+    </script>
+    <script src="popper.min.js"></script>
+    <script class="temp">
+      update(60);
+    </script>
+    <script src="jquery.min.js"></script>
+    <script class="temp">
+      update(70);
+    </script>
+    <script src="icos/all.js"></script>
+    <script class="temp">
+      update(80);
+    </script>
+    <script src="bootstrap.bundle.min.js"></script>
+    <script class="temp">
+      update(90);
+      setTimeout(function () {update(100)}, 5);
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

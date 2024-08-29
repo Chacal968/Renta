@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Empleados</title>
+    <link rel="stylesheet" href="/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <a href="/" class="navbar-brand">Lista de autos</a>
+    </nav>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <form action="/solicitud" method="get">
+                    <div class="form-floating mb-3">
+                        <input type="text" name="address" placeholder="" class="form-control" >
+                        <label>Dirección</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" name="Categ" id="SelCategoria" required>
+                        <% if (queryResultCateg) { %>                            
+                            <% for (var i=0; i < queryResultCateg.length;  i++) { %>
+                                <option value=<%=queryResultCateg[i].id%>> <%=queryResultCateg[i].categoria%> </option> 
+                                <% } %>
+                        <% } %>                        
+                        <option selected></option>
+                        </select>
+                        <label >Categoría</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="SelProvincia" required>
+                        <% if (queryResultProv) { %>                            
+                            <% for (var i=0; i < queryResultProv.length;  i++) { %>
+                                <option value=<%=queryResultProv[i].id%>> <%=queryResultProv[i].provincia%> </option> 
+                                <% } %>
+                        <% } %>                        
+                        <option selected></option>
+                        </select>
+                        <label >Provincia</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select id="SelPolo" class="form-select">
+                        </select>
+                        <label >Polo turístico</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-2">
+                        Buscar
+                    </button>
+                    <button type="reset" class="btn btn-primary mt-2">
+                        Cancelar
+                    </button>
+                </form>
+            </div>
+        </div>          
+    </div>
+    
+    <div class="container">
+        <h1 class="mt-5">Subir Imagen</h1>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="image">Selecciona una imagen:</label>
+                <input type="file" class="form-control-file" id="image" name="image" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Subir</button>
+        </form>
+        <!--<a href="/images">Ver Imágenes</a>-->
+    </div>
+
+    <script src="/jquery.slim.min.js"></script>
+    <script src="/popper.min.js"></script>
+    <script src="/bootstrap4.5.2.min.js"></script>
+
+    <script src="/bootstrap.min.js"></script>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+    <script src="/jquery.min.js"></script>
+    <script src="eventos.js"></script>
+
+</body>
+</html>

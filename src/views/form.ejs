@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html id="html" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Renta de Carros</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/normalize.css">
+    <link rel="stylesheet" href="/icos/all.css">
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <link rel="stylesheet" href="/styleform.css">
+</head>
+<body>
+  <div class="temp" role="status" style="background-color: white; height: 100vh; width: 100vw; position: absolute; z-index: 9999;">
+    <span>Loading...</span>
+    <script>
+      var t = 1;
+      function update (a) {
+        t = a;
+        var bar = document.getElementById('bar');
+        if (bar) bar.style = `width: ${t}%`;
+      }
+      setTimeout(function () {
+        document.getElementsByClassName('temp')[0].innerHTML = `<span class="visually-hidden">Loading...</span><div class="spinner-border" style="width: 5rem; height: 5rem; position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;"></div><style>#bar {transition: width 3s;}</style><div class="progress" style="margin-top: 70vh; margin-left: auto; margin-right: auto; width: 50vw;"><div class="progress-bar" id="bar" role="progressbar" style="width: ${t}%"></div></div>`;
+      }, 1000);
+    </script>
+  </div>
+    <header class="page-header" hidden>
+        <!--<nav role="navigation">
+        
+        </nav>-->
+        <nav role="navigation" class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              
+              <a class="navbar-brand" href="/"> <img src="/logos/6.png"  alt="Cuaba-Group" id="logo"> </a>
+              
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li>
+                    <a class="nav-link" href="#">Inicio</a>
+                  </li>
+                  <li>
+                    <a class="nav-link active" href="#">Renta de Autos</a>
+                  </li>
+                  <li>
+                    <a class="nav-link" href="#">Hoteles</a>
+                  </li>
+                  <li>
+                    <a class="nav-link" href="#">Viajes</a>
+                  </li>
+                  <li>
+                    <a class="nav-link" href="#">Casas particulares</a>
+                  </li>
+                </ul>
+              
+              </div>
+            </div>
+          </nav>
+        
+    </header>
+
+    <script class="temp">
+      update(10);
+    </script>
+
+    <div class="cont" hidden>
+      
+      <div class="sidebar">
+        <form method="get" action="/" class="formside mt-3" id="formside">
+
+          <label class="form-label mx-2 mt-3">Buscar por</label>
+
+          <div class="form-floating mx-2 mt-2">
+            <select class="form-select px-3" id="Categ" name="Categ" value="<%= inicialData.Categ %>" required>
+              <option value="0">Todas</option>
+              <% if (queryResultCateg) { %>                            
+                <% for (var i=0; i < queryResultCateg.length;  i++) { %>
+                    <option value=<%=queryResultCateg[i].id%>> <%=queryResultCateg[i].categoria%> </option> 
+                    <% } %>
+            <% } %>  
+            </select>
+            <label>Categoría</label>
+          </div>
+          <div class="mx-2 mt-2 date">
+            
+            <div class="form-floating datepicker left">
+              <input type="date" id="pickup" name="pick" value="<%= inicialData.pick %>" class="form-control picker" placeholder="" required>
+              <label>Fecha de recogida</label>
+            </div>
+
+            <div class="form-floating datepicker right mt-2">
+              <input type="date" id="dropoff" name="drop" value="<%= inicialData.drop %>" class="form-control picker" placeholder="" required>
+              <label>Fecha de devolución</label>
+            </div>
+
+          </div>
+          
+          <button type="submit" id="btnBuscar" class="btn btn-outline-danger btn-form mx-2 mt-2">Buscar</button>
+          <button type="submit" formaction="" id="btnRefrescar" class="btn btn-outline-danger btn-form mx-2 mt-2 mb-3">Refrescar Precios</button>
+
+        </form>
+      </div>
+
+      <script class="temp">
+        update(20);
+      </script>
+
+      <div class="layout container">
+          <div class="row g-0">
+            <div class="col position-relative">
+              <div class="mb-3"></div>
+              <h2 class="d-inline-block"><%= selCar.marca %> <%= selCar.modelo %></h2>
+              <img src="/logos/<%= selCar.idProveedor %>.png" class="logo position-absolute end-0 top-50 translate-middle-y">
+              <hr class="m-0 mt-3">
+            </div>
+          </div>
+          <div class="row g-0">
+            <div class="col-8 g-3">
+              <img class="imgCar p-3 bg-white" src="/Carros/<%= selCar.idAuto %>.jpg" alt="<%= selCar.marca %> <%= selCar.modelo %>">
+            </div>
+            <div class="col-4 g-3 d-flex align-items-center bg-white aside">
+              <dl class="flex-grow-1 text-center mb-0">
+                <dt>Caregoría</dt>
+                <dd><%= selCar.categoria %></dd>
+                <hr>
+                <dt>Transmisión</dt>
+                <dd><%= selCar.transmision %></dd>
+                <hr>
+                <dt>Costo por día</dt>
+                <dd>$<%= selCar.costo %></dd>
+                <hr>
+                <dt>Costo total</dt>
+                <dd class="costoTotal">$<%= diasReservados*selCar.costo + 42 %></dd>
+              </dl>
+            </div>
+          </div>
+      </div>
+
+      <script class="temp">
+        update(30);
+      </script>
+
+    </div>
+    <div class="mx-5 mt-3">
+      <div class="row g-0">
+        <div class="col g-5">
+          <hr class="m-0 mb-4">
+          <h4>Por favor, elija la oficina y los horarios de recogida y devolución</h4>
+          <hr class="m-0 mt-4">
+        </div>
+      </div>
+      <div class="row g-0 mb-5">
+        <form id="form" action="/" class="row g-0 needs-validation was-validated" novalidate>
+          <div class="col-4-5 g-4">
+            <h4 class="mb-4">Recogida</h4>
+            <div class="form-floating mx-2 mt-2">
+              <select class="form-select pl-3 pr-4 text-truncate" id="pickupPlace" name="pickupPlace" required>
+                <% if (queryResultProv) { %>                     
+                  <% for (var i=0; i < queryResultProv.length;  i++) { %>
+                      <option value=<%=queryResultProv[i].id%>> <%=queryResultProv[i].provincia%> </option> 
+                      <% } %>
+              <% } %>
+              </select>       
+              <label>Provincia</label>
+            </div>
+
+            <div class="form-floating mx-2 mt-4">
+              <select class="form-select pl-3 pr-4 text-truncate" disabled id="pickupPolo" name="pickupPolo" required>
+                <option selected></option>
+              </select>
+              <label>Polo turístico</label>
+            </div>
+
+            <div class="form-floating mx-2 mt-4">
+              <select class="form-select pl-3 pr-4 text-truncate" disabled id="pickupOficina" name="pickupOficina" required>
+                <option selected></option>
+              </select>
+              <label>Oficina</label>
+            </div>
+
+            <div class="d-flex mx-2 mt-4 mb-5 position-relative inDatePick">
+              <input id="timepkr1" type="text" readonly="" name="pickupTime" class="form-control d-inline-block flex-grow-1 inTime" placeholder="HH:MM" required disabled/>
+              <button type="button" id="btnHoraEntrega1" class="btn btn-danger d-inline-block ml-1" style="width:40px;" disabled><i class="fa fa-clock"></i></button>
+
+              <div id="tpicker1" class="tpicker d-block position-absolute p-2 visually-hidden" style="transform: translateY(100%)">
+                <div class="pk1">
+                  <div class="row g-0">
+                    <div class="hr"><div class="hrup"><i class="fa fa-angle-up"></i></div><a class="hrhere btn btn-outline-danger">12</a><div class="hrdown"><i class="fa fa-angle-down"></i></div>
+                    </div>
+                    <div class="dot2">:</div>
+                    <div class="hr"><div class="minup"><i class="fa fa-angle-up"></i></div><a class="minhere btn btn-outline-danger">00</a>
+                    <div class="mindown"><i class="fa fa-angle-down"></i></div></div>
+                    <div class="dot"><button type="button" class="btn btn-danger medchange">AM</button></div>
+                  </div>
+                </div>
+                <div class="pk2 mintt">
+                  <table class="table table-bordered mintable">
+                    <tr>
+                      <td><a onclick="updatetime(0 + Math.floor(minutos/60)*60)" class="btn">00</a></td>
+                      <td><a onclick="updatetime(5 + Math.floor(minutos/60)*60)" class="btn">05</a></td>
+                      <td><a onclick="updatetime(10 + Math.floor(minutos/60)*60)" class="btn">10</a></td>
+                      <td><a onclick="updatetime(15 + Math.floor(minutos/60)*60)" class="btn">15</a></td>
+                    </tr>
+                    <tr>
+                      <td><a onclick="updatetime(20 + Math.floor(minutos/60)*60)" class="btn">20</a></td>
+                      <td><a onclick="updatetime(25 + Math.floor(minutos/60)*60)" class="btn">25</a></td>
+                      <td><a onclick="updatetime(30 + Math.floor(minutos/60)*60)" class="btn">30</a></td>
+                      <td><a onclick="updatetime(35 + Math.floor(minutos/60)*60)" class="btn">35</a></td>
+                    </tr>
+                    <tr>
+                      <td><a onclick="updatetime(40 + Math.floor(minutos/60)*60)" class="btn">40</a></td>
+                      <td><a onclick="updatetime(45 + Math.floor(minutos/60)*60)" class="btn">45</a></td>
+                      <td><a onclick="updatetime(50 + Math.floor(minutos/60)*60)" class="btn">50</a></td>
+                      <td><a onclick="updatetime(55 + Math.floor(minutos/60)*60)" class="btn">55</a></td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="pk2 hrtt">
+                  <table class="table table-bordered hrtable">
+                    <tr>
+                      <td><a onclick="updatetime(60 + minutos%60 + (minutos >= 720 ? 720 : 0))" class="btn">01</a></td>
+                      <td><a onclick="updatetime(60*2 + minutos%60 + (minutos >= 720 ? 720 : 0))" class="btn">02</a></td>
+                      <td><a onclick="updatetime(60*3 + minutos%60 + (minutos >= 720 ? 720 : 0))" class="btn">03</a></td>
+                      <td><a onclick="updatetime(60*4 + minutos%60 + (minutos >= 720 ? 720 : 0))" class="btn">04</a></td>
+                    </tr>
+                    <tr>
+                      <td><a onclick="updatetime(60*5 + minutos%60 + (minutos >= 720 ? 720 : 0))" class="btn">05</a></td>
+                      <td><a onclick="updatetime(60*6 + minutos%60 + (minutos >= 720 ? 720 : 0))" class="btn">06</a></td>
+                      <td><a onclick="updatetime(60*7 + minutos%60 + (minutos >= 720 ? 720 : 0))" class="btn">07</a></td>
+                      <td><a onclick="updatetime(60*8 + minutos%60 + (minutos >= 720 ? 720 : 0))" class="btn">08</a></td>
+                    </tr>
+                    <tr>
+                      <td><a onclick="updatetime(60*9 + minutos%60 + (minutos >= 720 ? 720 : 0))" class="btn">09</a></td>
+                      <td><a onclick="updatetime(60*10 + minutos%60 + (minutos >= 720 ? 720 : 0))" class="btn">10</a></td>
+                      <td><a onclick="updatetime(60*11 + minutos%60 + (minutos >= 720 ? 720 : 0))" class="btn">11</a></td>
+                      <td><a onclick="updatetime(60*12 + minutos%60 + (minutos >= 720 ? 720 : 0))" class="btn">12</a></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-4-5 g-4">
+            <h4 class="mb-4">Devolución</h4>
+            <div class="form-floating mx-2 mt-2">
+              <select class="form-select pl-3 pr-4 text-truncate" id="dropoffPlace" name="dropoffPlace" required>
+                <% if (queryResultProv) { %>                            
+                  <% for (var i=0; i < queryResultProv.length;  i++) { %>
+                      <option value=<%=queryResultProv[i].id%>> <%=queryResultProv[i].provincia%> </option> 
+                      <% } %>
+              <% } %>
+              </select>
+              <label>Provincia</label>
+            </div>
+
+            <div class="form-floating mx-2 mt-4">
+              <select class="form-select pl-3 pr-4 text-truncate" disabled id="dropoffPolo" name="dropoffPolo" required>
+                <option selected></option>
+              </select>
+              <label>Polo turístico</label>
+            </div>
+
+            <div class="form-floating mx-2 mt-4">
+              <select class="form-select pl-3 pr-4 text-truncate" disabled id="dropoffOficina" name="dropoffOficina" required>
+                <option selected></option>
+              </select>
+              <label>Oficina</label>
+            </div>
+
+            <div class="d-flex mx-2 mt-4 mb-5 position-relative inDateDrop">
+              <input id="timepkr2" type="text" readonly="" name="dropoffTime" class="form-control d-inline-block flex-grow-1 inTime" placeholder="HH:MM" required disabled/>
+              <button type="button" id="btnHoraEntrega2" class="btn btn-danger d-inline-block ml-1" style="width:40px;" disabled><i class="fa fa-clock"></i></button>
+
+              <div id="tpicker2" class="tpicker d-block position-absolute p-2 visually-hidden" style="transform: translateY(100%)">
+                <div class="pk1">
+                  <div class="row g-0">
+                    <div class="hr"><div class="hrup"><i class="fa fa-angle-up"></i></div><a class="hrhere btn btn-outline-danger">12</a><div class="hrdown"><i class="fa fa-angle-down"></i></div>
+                    </div>
+                    <div class="dot2">:</div>
+                    <div class="hr"><div class="minup"><i class="fa fa-angle-up"></i></div><a class="minhere btn btn-outline-danger">00</a>
+                    <div class="mindown"><i class="fa fa-angle-down"></i></div></div>
+                    <div class="dot"><button type="button" class="btn btn-danger medchange">AM</button></div>
+                  </div>
+                </div>
+                <div class="pk2 mintt">
+                  <table class="table table-bordered mintable">
+                    <tr>
+                      <td><a onclick="updatetime2(0 + Math.floor(minutos2/60)*60)" class="btn">00</a></td>
+                      <td><a onclick="updatetime2(5 + Math.floor(minutos2/60)*60)" class="btn">05</a></td>
+                      <td><a onclick="updatetime2(10 + Math.floor(minutos2/60)*60)" class="btn">10</a></td>
+                      <td><a onclick="updatetime2(15 + Math.floor(minutos2/60)*60)" class="btn">15</a></td>
+                    </tr>
+                    <tr>
+                      <td><a onclick="updatetime2(20 + Math.floor(minutos2/60)*60)" class="btn">20</a></td>
+                      <td><a onclick="updatetime2(25 + Math.floor(minutos2/60)*60)" class="btn">25</a></td>
+                      <td><a onclick="updatetime2(30 + Math.floor(minutos2/60)*60)" class="btn">30</a></td>
+                      <td><a onclick="updatetime2(35 + Math.floor(minutos2/60)*60)" class="btn">35</a></td>
+                    </tr>
+                    <tr>
+                      <td><a onclick="updatetime2(40 + Math.floor(minutos2/60)*60)" class="btn">40</a></td>
+                      <td><a onclick="updatetime2(45 + Math.floor(minutos2/60)*60)" class="btn">45</a></td>
+                      <td><a onclick="updatetime2(50 + Math.floor(minutos2/60)*60)" class="btn">50</a></td>
+                      <td><a onclick="updatetime2(55 + Math.floor(minutos2/60)*60)" class="btn">55</a></td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="pk2 hrtt">
+                  <table class="table table-bordered hrtable">
+                    <tr>
+                      <td><a onclick="updatetime2(60 + minutos2%60 + (minutos2 >= 720 ? 720 : 0))" class="btn">01</a></td>
+                      <td><a onclick="updatetime2(60*2 + minutos2%60 + (minutos2 >= 720 ? 720 : 0))" class="btn">02</a></td>
+                      <td><a onclick="updatetime2(60*3 + minutos2%60 + (minutos2 >= 720 ? 720 : 0))" class="btn">03</a></td>
+                      <td><a onclick="updatetime2(60*4 + minutos2%60 + (minutos2 >= 720 ? 720 : 0))" class="btn">04</a></td>
+                    </tr>
+                    <tr>
+                      <td><a onclick="updatetime2(60*5 + minutos2%60 + (minutos2 >= 720 ? 720 : 0))" class="btn">05</a></td>
+                      <td><a onclick="updatetime2(60*6 + minutos2%60 + (minutos2 >= 720 ? 720 : 0))" class="btn">06</a></td>
+                      <td><a onclick="updatetime2(60*7 + minutos2%60 + (minutos2 >= 720 ? 720 : 0))" class="btn">07</a></td>
+                      <td><a onclick="updatetime2(60*8 + minutos2%60 + (minutos2 >= 720 ? 720 : 0))" class="btn">08</a></td>
+                    </tr>
+                    <tr>
+                      <td><a onclick="updatetime2(60*9 + minutos2%60 + (minutos2 >= 720 ? 720 : 0))" class="btn">09</a></td>
+                      <td><a onclick="updatetime2(60*10 + minutos2%60 + (minutos2 >= 720 ? 720 : 0))" class="btn">10</a></td>
+                      <td><a onclick="updatetime2(60*11 + minutos2%60 + (minutos2 >= 720 ? 720 : 0))" class="btn">11</a></td>
+                      <td><a onclick="updatetime2(60*12 + minutos2%60 + (minutos2 >= 720 ? 720 : 0))" class="btn">12</a></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-2-5 g-4 text-end position-relative">
+            <div id="infoCost">
+              <h1 class="costoTotal">$<%= diasReservados*selCar.costo + 42 %></h1>
+              <br>
+              <span id="costoTotalDs" class="fw-bold d-block">Renta: $<%= selCar.costo %> x <%= diasReservados %> días = $<%= diasReservados*selCar.costo %></span>
+              <span class="fw-bold d-block">Tanque de gasolina: $42</span>
+            </div>
+            <button type="submit" id="btnReservar" class="btn btn-outline-danger position-absolute">Reservar</button>
+          </div>
+        </form>
+
+        <div class="position-fixed top-0 toastLive p-3" style="z-index: 9999">
+          <div id="liveToast" class="toast" >
+            <div class="toast-header">
+              <strong class="me-auto">Atención</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+              Faltan campos por completar.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    
+    <footer class="mt-4" hidden>
+
+      <div class="d-flex flex-row mt-2 logos">
+        <img src="/logos/1.png" alt="cubacar">
+        <img src="/logos/2.png" alt="havanautos">
+        <img src="/logos/3.png" alt="rex">
+        <img src="/logos/4.png" alt="via">
+        <img src="/logos/5.png" alt="cuba on the road">
+      </div>
+
+      <div class="d-flex flex-row fend">
+        <div class="text-center info">
+          <i class="fas fa-copyright"></i> 2024 Cuabagroup, todos los derechos reservados.
+        </div>
+
+        <div class="text-center info">
+          <i class="fas fa-map-marker-alt"></i> Plaza San Miguel, No.8, 2do Exterior Derecha, 28005, Madrid, España.
+        </div>
+
+        <div class="text-center info">
+          <i class="fas fa-mobile"></i> <i class="fas fa-comment-alt"></i> <a href="tel:+53 5 388 9896" class="d-inline-block" id="ph1">+53 5 388 9896</a> <a href="tel:+34 622 590 002" class="d-inline-block" id="ph2">+34 622 590 002</a>
+          <a class="d-inline-block" href="mailto:consulting@cuabagroup.com"><i class="fas fa-mail-bulk"></i> consulting@cuabagroup.com</a>
+        </div>
+      </div>
+
+    </footer>
+
+    <script class="temp">
+      update(40);
+    </script>
+
+    <script src="/jquery.slim.min.js"></script>
+    <script class="temp">
+      update(50);
+    </script>
+    <script src="/tpicker.js"></script>
+    <script class="temp">
+      update(60);
+    </script>
+    <script src="/popper.min.js"></script>
+    <script class="temp">
+      update(70);
+    </script>
+    <script src="/jquery.min.js"></script>
+    <script class="temp">
+      update(80);
+    </script>
+    <script src="/icos/all.js"></script>
+    <script class="temp">
+      update(90);
+    </script>
+    <script src="/bootstrap.bundle.min.js"></script>
+    <script class="temp">
+      update(100);
+    </script>
+    <script src="/scriptform.js"></script>
+    <script>
+      var diasReservados = <%= diasReservados %>;
+      var selCarCosto = <%= selCar.costo %>;
+      var supleDrop = 0;
+      var supleAereo = 0;
+      var supleHora = 0;
+    </script>
+</body>
+</html>
