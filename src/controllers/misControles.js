@@ -6,14 +6,6 @@ const { fileLoader } = require('ejs');
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('./DB.db');
 
-db.exec(require('./DB.sql'), (err) => {
-   if (err) {
-       console.error(err.message);
-   } else {
-       console.log("Base de datos importada correctamente.");
-   }
-});
-
 const controller = {};
 
 function listar (codCateg='a.categ_comercial', fecha1, fecha2, idAuto = 'idAuto') {
@@ -22,20 +14,20 @@ function listar (codCateg='a.categ_comercial', fecha1, fecha2, idAuto = 'idAuto'
     var diasReservados = Math.abs((fechaFinal - fechaInicial) / (1000*60*60*24));
     
     return new Promise((resolve, reject) => {
-        var vQuery = 
-        'SELECT a.marca, a.modelo, a.transmision, a.id idAuto, c.categoria, p.id idProveedor, ' +
-                'cd.costo + ceil((costo*margen_auto)/100) + seguro + ceil((seguro*margen_seguro)/100) costo ' +
-          'FROM autos a, categ_comercial c, proveedor p, costo_dias cd, temporada t ' + 
-         'WHERE a.categ_comercial = c.id ' +
-           'AND a.proveedor = p.id ' +
-           'AND cd.temporada = t.tipo ' +
-           'AND cd.idauto = a.id ' +
-           'AND date("' + fechaInicial.toISOString().split('T')[0].replaceAll('-', '/') + '") between t.fecini and t.fecfin ' +
-           'AND ' + diasReservados + ' between cd.rangomin and cd.rangomax ';
+        var vQuery =
+            'SELECT a.marca, a.modelo, a.transmision, a.id AS idAuto, c.categoria, p.id AS idProveedor, ' +
+            'cd.costo_auto + ceil((costo_auto*margen_auto)/100.0) + costo_seguro + ceil((costo_seguro*margen_seguro)/100.0) costo ' +
+            'FROM autos a ' +
+            'JOIN categ_comercial c ON a.categ_comercial = c.id ' +
+            'JOIN proveedor p ON a.proveedor = p.id ' +
+            'JOIN costo_variable cd ON cd.idauto = a.id ' +
+            'JOIN temporada t ON cd.temporada = t.tipo ' +
+            'WHERE date("' + fechaInicial.toISOString().split('T')[0] + '") BETWEEN t.fecini AND t.fecfin ' +
+            'AND ' + diasReservados + ' BETWEEN cd.rangomin AND cd.rangomax ';
         if (codCateg != '0') vQuery += `AND a.categ_comercial = ${codCateg} `;
-        vQuery += `AND idAuto = ${idAuto} `;
-        vQuery += 'ORDER BY 7 ';
-        
+        vQuery += `AND a.id = ${idAuto} `;
+        vQuery += 'ORDER BY costo ';
+
         db.all(vQuery, (err, results) => {if (err) reject(err); resolve([results, diasReservados]);});
     });
 }
