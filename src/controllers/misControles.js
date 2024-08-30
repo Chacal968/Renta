@@ -6,7 +6,7 @@ const { fileLoader } = require('ejs');
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('./DB.db');
 
-db.exec(require('../DB.sql'), (err) => {
+db.exec(require('./DB.sql'), (err) => {
    if (err) {
        console.error(err.message);
    } else {
