@@ -28,7 +28,8 @@
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "renta": "file:",
-    "timeago.js": "^4.0.2"
+    "timeago.js": "^4.0.2",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
