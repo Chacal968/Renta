@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/app.js"
+    "dev": "node src/app.js"
   },
   "keywords": [],
   "author": "",
@@ -25,15 +25,7 @@
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "renta": "file:",
-<<<<<<< HEAD
     "sqlite3": "^5.1.7",
     "timeago.js": "^4.0.2"
-=======
-    "timeago.js": "^4.0.2",
-    "sqlite3": "^5.1.7"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.4"
->>>>>>> 869041aad354796e6ae4bf3a8c26bc44db79e08d
   }
 }
