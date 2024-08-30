@@ -1,20 +1,17 @@
 const { body, header } = require("express-validator");
-const mysql = require('mysql');
 const express = require('express');
 const router = express.Router();
 const { fileLoader } = require('ejs');
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'renta',
-    password: 'renta',
-    port: '3306',
-    database: 'renta'
-});
+const sqlite3 = require('sqlite3');
+const db = new sqlite3.Database('./DB.db');
 
-db.connect(err => {
-    if (err) throw err;
-    console.log('Conectado a la base de datos MySQL');
+db.exec(require('../DB.sql'), (err) => {
+   if (err) {
+       console.error(err.message);
+   } else {
+       console.log("Base de datos importada correctamente.");
+   }
 });
 
 const controller = {};
@@ -39,12 +36,12 @@ function listar (codCateg='a.categ_comercial', fecha1, fecha2, idAuto = 'idAuto'
         vQuery += `AND idAuto = ${idAuto} `;
         vQuery += 'ORDER BY 7 ';
         
-        db.query(vQuery, (err, results) => {if (err) reject(err); resolve([results, diasReservados]);});
+        db.all(vQuery, (err, results) => {if (err) reject(err); resolve([results, diasReservados]);});
     });
 }
 
 controller.inicio = (req, res) => {
-    db.query('SELECT * FROM categ_comercial', (err, filasCateg) => {
+    db.all('SELECT * FROM categ_comercial', (err, filasCateg) => {
         if (err) {res.json(err);} 
         
         var today = new Date();
@@ -73,10 +70,10 @@ controller.listarAutos = (req, res) => {
 }
 
 controller.form = (req, res) => {
-    db.query('SELECT * FROM provincia', (err, filasProv) => {
+    db.all('SELECT * FROM provincia', (err, filasProv) => {
         if (err) {res.json(err);}
 
-        db.query('SELECT * FROM categ_comercial', (err, filasCateg) => {
+        db.all('SELECT * FROM categ_comercial', (err, filasCateg) => {
             if (err) {res.json(err);}
     
             listar(req.query.Categ,
@@ -98,7 +95,7 @@ controller.form = (req, res) => {
 }
 
 controller.PoblarPolosTur = (req, res) => {
-    db.query(`SELECT id, nombre_polo FROM polos_turisticos WHERE provincia = ${req.query.id}`, (err, results) => {
+    db.all(`SELECT id, nombre_polo FROM polos_turisticos WHERE provincia = ${req.query.id}`, (err, results) => {
         if (err) { res.json(err); }
         res.send(results.map(row => `<option value="${row.id}">${row.nombre_polo}</option>`).join(''));
     });
@@ -110,7 +107,7 @@ controller.PoblarOficinaRenta = (req, res) => {
                         substr(hora_cierre,1, 2) * 60 + substr(hora_cierre,3, 2) hora_cierre 
                         FROM oficina_renta 
                         WHERE polo_turistico_id = ${req.query.id}`;
-    db.query(querySQL, (err, resQuery) => { 
+    db.all(querySQL, (err, resQuery) => { 
         if (err) { res.json(err); }
         res.send(resQuery);
     });
@@ -118,13 +115,13 @@ controller.PoblarOficinaRenta = (req, res) => {
 
 function getLocation (proPolOf, id) {
     if(proPolOf == 'pro') return new Promise((resolve, reject) => {
-        db.query(`SELECT provincia FROM provincia WHERE id = ${id}`, (err, results) => {if (err) reject(err); resolve(results[0].provincia);});
+        db.all(`SELECT provincia FROM provincia WHERE id = ${id}`, (err, results) => {if (err) reject(err); resolve(results[0].provincia);});
     })
     if(proPolOf == 'Pol') return new Promise((resolve, reject) => {
-        db.query(`SELECT nombre_polo FROM polos_turisticos WHERE id = ${id}`, (err, results) => {if (err) reject(err); resolve(results[0].nombre_polo);});
+        db.all(`SELECT nombre_polo FROM polos_turisticos WHERE id = ${id}`, (err, results) => {if (err) reject(err); resolve(results[0].nombre_polo);});
     })
     if(proPolOf == 'Of') return new Promise((resolve, reject) => {
-        db.query(`SELECT direccion FROM oficina_renta WHERE id = ${id}`, (err, results) => {if (err) reject(err); resolve(results[0].direccion);});
+        db.all(`SELECT direccion FROM oficina_renta WHERE id = ${id}`, (err, results) => {if (err) reject(err); resolve(results[0].direccion);});
     })
 }
 
