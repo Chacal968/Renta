@@ -16,7 +16,7 @@ function listar (codCateg='a.categ_comercial', fecha1, fecha2, idAuto = 'idAuto'
     return new Promise((resolve, reject) => {
         var vQuery =
             'SELECT a.marca, a.modelo, a.transmision, a.id AS idAuto, c.categoria, p.id AS idProveedor, ' +
-            'cd.costo_auto + ceil((costo_auto*margen_auto)/100.0) + costo_seguro + ceil((costo_seguro*margen_seguro)/100.0) costo ' +
+            'cd.costo_auto + ((costo_auto*margen_auto)/100) + costo_seguro + ((costo_seguro*margen_seguro)/100) costo ' +
             'FROM autos a ' +
             'JOIN categ_comercial c ON a.categ_comercial = c.id ' +
             'JOIN proveedor p ON a.proveedor = p.id ' +
